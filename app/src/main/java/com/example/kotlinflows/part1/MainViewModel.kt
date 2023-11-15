@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
-const val StartValue = 5
-private val EmitDelay = 1000L
-private val CollectDelay = 1000L
+const val StartValue = 10
+private const val EmitDelay = 1000L
+private const val CollectDelay = 1000L
 
-private const val TAG = "MainViewModel1"
-private const val TAG2 = "MainViewModel2"
-private const val TAG3 = "MainViewModel3"
+private const val TAG = "MainViewModel_1"
+private const val TAG2 = "MainViewModel_2"
+private const val TAG3 = "MainViewModel_3"
 
 class MainViewModel : ViewModel() {
     /**

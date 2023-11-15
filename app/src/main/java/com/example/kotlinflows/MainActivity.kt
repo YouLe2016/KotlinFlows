@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.kotlinflows.part1.Greeting
+import com.example.kotlinflows.part2.Part2Screen
 import com.example.kotlinflows.ui.theme.KotlinFlowsTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting()
+                    // Greeting()
+                    Part2Screen()
                 }
             }
         }
