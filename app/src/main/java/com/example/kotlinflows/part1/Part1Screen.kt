@@ -16,16 +16,16 @@ import com.example.kotlinflows.ui.theme.KotlinFlowsTheme
 @Composable
 fun Greeting(modifier: Modifier = Modifier) {
     val viewModel = viewModel<MainViewModel>()
-    val count by viewModel.countDownFlow.collectAsState(initial = StartValue)
-    Box(
-        modifier = modifier.fillMaxSize(),
-    ) {
-        Text(
-            text = count.toString(),
-            fontSize = 30.sp,
-            modifier = Modifier.align(Alignment.Center),
-        )
-    }
+//    val count by viewModel.countDownFlow.collectAsState(initial = StartValue)
+//    Box(
+//        modifier = modifier.fillMaxSize(),
+//    ) {
+//        Text(
+//            text = count.toString(),
+//            fontSize = 30.sp,
+//            modifier = Modifier.align(Alignment.Center),
+//        )
+//    }
 }
 
 @Preview(showBackground = true)

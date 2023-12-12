@@ -3,21 +3,27 @@ package com.example.kotlinflows.part2
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.reduce
+import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 
 private const val TAG = "MainViewModel2"
@@ -38,15 +44,72 @@ class MainViewModel2 : ViewModel() {
         viewModelScope.launch {
             // collectFlow()
             // count()
-            // reduce()
+            reduce()
 
-            //  flatMapConcat()
-            //  flatMapMerge()
+            // flatMapConcat()
+            // flatMapMerge()
 
-           //  buffer()
-            conflate()
+            // buffer()
+            // conflate()
+
+            // debounce()
+            // sample()
+            // sample2()
+
         }
 //        collectFlow2()
+    }
+
+    // 一秒一次
+    private suspend fun sample() {
+        flow {
+            while (true) {
+                delay(50)
+                emit("发送一条弹幕")
+            }
+        }.sample(1000)
+            .flowOn(Dispatchers.IO)
+            .collect {
+                Log.d(TAG, it)
+            }
+    }
+
+    private suspend fun sample2() {
+        flow {
+            repeat(10000) {
+                // 写上这行emit2就不会打印了
+                // emit("emit1 $it")
+                delay(100)
+                emit("emit2 $it")
+            }
+        }.sample(200)
+            .flowOn(Dispatchers.IO)
+            .collect {
+                Log.d(TAG, it)
+            }
+
+    }
+
+    /**
+     * 输出结果：
+    2023-11-23 09:47:30.448 32538-32538 System.out              com.example.kotlinflows              I  2
+    2023-11-23 09:47:30.749 32538-32538 System.out              com.example.kotlinflows              I  5
+     */
+    @OptIn(FlowPreview::class)
+    private suspend fun debounce() {
+        flow {
+            emit(1)
+            emit(2)
+            delay(600)
+            emit(3)
+            delay(100)
+            emit(4)
+            delay(100)
+            emit(5)
+        }.debounce(500)
+            .collect {
+                println(it)
+            }
     }
 
     /*
@@ -212,6 +275,16 @@ class MainViewModel2 : ViewModel() {
         }
     }
 
+    private suspend fun flatMapConcat2() {
+        val flow1 = (1..10).asFlow()
+        val flow2 = ('a'..'d').asFlow()
+        flow1.flatMapConcat {
+            flow2
+        }.collect {
+            Log.d(TAG, "collect: $it")
+        }
+    }
+
     private suspend fun count() {
         val count = countDownFlow.count {
             it > 5 && it % 2 == 0
@@ -220,15 +293,15 @@ class MainViewModel2 : ViewModel() {
     }
 
     private suspend fun reduce() {
-//        val sum = countDownFlow.reduce { accumulator, value ->
-//            accumulator + value
-//        } // 55
+        val sum = countDownFlow.reduce { accumulator, value ->
+            accumulator + value
+        } // 55
 
         // 和 reduce 相比，可以设置初始值
-        val sum = countDownFlow.fold(100) { accumulator, value ->
+        val sum2 = countDownFlow.fold(100) { accumulator, value ->
             accumulator + value
         } // 155
-        Log.d(TAG, "collectFlow3: $sum")
+        Log.d(TAG, "collectFlow3: $sum2")
     }
 
     /**

@@ -11,21 +11,28 @@ import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.kotlinflows.part3.MainViewModel3
-import com.example.kotlinflows.part3.PartScreen3
 import com.example.kotlinflows.ui.theme.KotlinFlowsTheme
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.ObjectInputStream
 import kotlin.math.roundToInt
+import kotlin.system.measureTimeMillis
 
 private const val TAG = "MainActivity"
 
@@ -34,6 +41,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         // xmlLayout()
         setContent {
             KotlinFlowsTheme {
@@ -43,7 +52,8 @@ class MainActivity : ComponentActivity() {
                 ) {
                     // Greeting()
                     // Part2Screen()
-                    PartScreen3()
+                    // PartScreen3()
+                    // PartScreen5()
                 }
             }
         }

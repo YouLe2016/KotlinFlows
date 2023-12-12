@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
-const val StartValue = 10
+const val StartValue = 5
 private const val EmitDelay = 1000L
-private const val CollectDelay = 1000L
+private const val CollectDelay = 2000L
 
 private const val TAG = "MainViewModel_1"
 private const val TAG2 = "MainViewModel_2"
@@ -30,7 +30,7 @@ class MainViewModel : ViewModel() {
 
     init {
         collectFlow()
-        collectFlow2()
+        //  collectFlow2()
     }
 
     /**
@@ -44,9 +44,16 @@ class MainViewModel : ViewModel() {
      */
     private fun collectFlow() {
         viewModelScope.launch {
-            countDownFlow.collect {
+            flow {
+                Log.d(TAG3, "flow1")
+                emit("flow1")
+                delay(EmitDelay)
+                Log.d(TAG3, "flow2")
+                emit("flow2")
+            }.collect {
+                Log.d(TAG, "collect1: $it")
                 delay(CollectDelay)
-                Log.d(TAG, "collectFlow: $it")
+                Log.d(TAG, "collect2: $it")
             }
         }
     }
@@ -58,8 +65,9 @@ class MainViewModel : ViewModel() {
     private fun collectFlow2() {
         viewModelScope.launch {
             countDownFlow.collectLatest {
+                Log.d(TAG, "collectLatest1: $it")
                 delay(CollectDelay)
-                Log.d(TAG2, "collectFlow2: $it")
+                Log.d(TAG, "collectLatest2: $it")
             }
         }
     }
