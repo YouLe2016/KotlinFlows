@@ -23,3 +23,4 @@ rootProject.name = "KotlinFlows"
 include(":app")
 include(":generics")
 include(":reflect")
+include(":encryption")

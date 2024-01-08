@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun PartScreen3() {
     val viewModel = viewModel<MainViewModel3>()
     val count by viewModel.stateFlow.collectAsState(initial = StartValue)
+    println(count)
     val count2 by viewModel.sharedFlow.collectAsState(initial = StartValue)
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -29,7 +30,7 @@ fun PartScreen3() {
     ) {
         Button(
             onClick = {
-                viewModel.incrementCounter()
+                viewModel.incrementCounterTimes(50)
             },
         ) {
             Text(

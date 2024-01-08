@@ -4,3 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.9.0" apply false
     id("org.jetbrains.kotlin.jvm") version "1.9.0" apply false
 }
+
+tasks.withType<JavaCompile> {
+    options.encoding = "utf-8"
+}

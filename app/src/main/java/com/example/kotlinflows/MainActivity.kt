@@ -26,6 +26,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.kotlinflows.part3.MainViewModel3
+import com.example.kotlinflows.part3.PartScreen3
+import com.example.kotlinflows.part5.PartScreen5
 import com.example.kotlinflows.ui.theme.KotlinFlowsTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -43,20 +45,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
 
-        // xmlLayout()
-        setContent {
-            KotlinFlowsTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    // Greeting()
-                    // Part2Screen()
-                    // PartScreen3()
-                    // PartScreen5()
-                }
-            }
-        }
+         xmlLayout()
+//        setContent {
+//            KotlinFlowsTheme {
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colorScheme.background
+//                ) {
+//                    // Greeting()
+//                    // Part2Screen()
+//                     PartScreen3()
+//                     // PartScreen5()
+//                }
+//            }
+//        }
     }
 
     private fun xmlLayout() {
@@ -78,18 +80,12 @@ class MainActivity : ComponentActivity() {
         )
         tvCounter.setOnClickListener {
             Log.d(TAG, "onClick: ")
-            viewModel.incrementCounterTimes(10)
-            /*// 和上面那一行一样效果
-            lifecycleScope.launch {
-                for (i in 1..10) {
-                    viewModel.incrementCounter()
-                    delay(1000L)
-                }
-            }*/
+            viewModel.incrementCounterTimes(50)
         }
-        collectLatestLifecycleFlow(viewModel.stateFlow) {
-            Log.d(TAG, "collectLatest: $it")
-            tvCounter.text = "当前值：$it"
+        tvCounter.text = "当前值1321312"
+        collectLifecycleFlow(viewModel.stateFlow) {
+            Log.d(TAG, "collect: $it")
+//            tvCounter.text = "当前值：$it"
         }
 
         val tvCounter2 = TextView(this).apply {

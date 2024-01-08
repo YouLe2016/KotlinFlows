@@ -1,8 +1,8 @@
 package com.wyl.reflect;
 
-import java.util.Objects;
+import java.util.function.Supplier;
 
-public class Animal {
+public class Animal implements IAnimal {
     public Animal() {
     }
 
@@ -12,10 +12,12 @@ public class Animal {
 
     private String name;
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }

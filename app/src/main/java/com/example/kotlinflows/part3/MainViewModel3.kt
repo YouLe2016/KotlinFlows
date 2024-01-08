@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.concurrent.thread
 
 const val StartValue = 0
 
@@ -30,11 +31,21 @@ class MainViewModel3 : ViewModel() {
     }
 
     fun incrementCounterTimes(times: Int) {
-        viewModelScope.launch {
-            for (i in 1..times) {
-                incrementCounter()
-                delay(1000L)
-            }
-        }
+            thread {
+                for (i in 1..times) {
+//                delay(500L)
+                    if (i % 2 != 0) {
+                        incrementCounter()
+                    } else {
+                        _stateFlow.value = _stateFlow.value
+                    }
+                }
+            }.start()
+//        viewModelScope.launch {
+//            for (i in 1..times) {
+//                incrementCounter()
+////                delay(500L)
+//            }
+//        }
     }
 }
