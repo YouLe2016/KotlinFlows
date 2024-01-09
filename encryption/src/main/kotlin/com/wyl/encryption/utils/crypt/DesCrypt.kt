@@ -1,6 +1,6 @@
-package com.wyl.encryption.utils
+package com.wyl.encryption.utils.crypt
 
-import java.io.InputStream
+import com.wyl.encryption.utils.Base64
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.DESKeySpec

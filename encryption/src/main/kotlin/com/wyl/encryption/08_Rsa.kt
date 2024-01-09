@@ -1,6 +1,6 @@
 package com.wyl.encryption
 
-import com.wyl.encryption.utils.RsaCrypt
+import com.wyl.encryption.utils.crypt.RsaCrypt
 
 fun a08_Rsa() {
     // val keyPair = RsaCrypt.generateKeyPair()

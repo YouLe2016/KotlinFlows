@@ -1,5 +1,6 @@
-package com.wyl.encryption.utils
+package com.wyl.encryption.utils.crypt
 
+import com.wyl.encryption.utils.Base64
 import java.security.Key
 import java.security.KeyFactory
 import java.security.KeyPair
@@ -9,7 +10,6 @@ import java.security.PublicKey
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 import javax.crypto.Cipher
-import javax.crypto.spec.SecretKeySpec
 
 object RsaCrypt {
     private const val ALGORITHM = "RSA"

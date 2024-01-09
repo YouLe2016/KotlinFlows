@@ -1,5 +1,6 @@
-package com.wyl.encryption.utils
+package com.wyl.encryption.utils.crypt
 
+import com.wyl.encryption.utils.Base64
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec

@@ -1,6 +1,6 @@
 package com.wyl.encryption
 
-import com.wyl.encryption.utils.AesCrypt
+import com.wyl.encryption.utils.crypt.AesCrypt
 
 fun a06_aes() {
     val input = "你好啊"

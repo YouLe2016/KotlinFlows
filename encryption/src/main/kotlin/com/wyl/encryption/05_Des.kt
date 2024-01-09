@@ -1,6 +1,6 @@
 package com.wyl.encryption
 
-import com.wyl.encryption.utils.DesCrypt
+import com.wyl.encryption.utils.crypt.DesCrypt
 
 fun a05_des() {
     val input = "你好啊"
