@@ -21,39 +21,64 @@ class MainViewModel : ViewModel() {
      * 没有 collect() 的话，flow()的block不会执行
      */
     val countDownFlow = flow {
-        for (i in StartValue downTo 0) {
+        for (i in 500 downTo 1) {
             Log.d(TAG3, "flow: $i")
             emit(i)
-            delay(EmitDelay)
+            delay(100)
         }
     }
 
     init {
-        collectFlow()
-        //  collectFlow2()
+//        collectFlow()
+//        collectLatestFlow()
     }
 
+
     /**
-    输出：
-    collectFlow.onEach: 5
-    collectFlow.onEach: 4
-    collectFlow.onEach: 3
-    collectFlow.onEach: 2
-    collectFlow.onEach: 1
-    collectFlow.onEach: 0
+    输出结果：
+    flow1(0)
+    collect: flow1(0)
+    collect: flow1(0)
+    flow2(0)
+    collect: flow2(0)
+    collect: flow2(0)
+    ------------------------------------
+    flow1(1)
+    耗时操作。。
+    collect: flow1(1)
+    flow2(1)
+    耗时操作。。
+    collect: flow2(1)
      */
     private fun collectFlow() {
         viewModelScope.launch {
+            var flag = 0
             flow {
-                Log.d(TAG3, "flow1")
-                emit("flow1")
+                val msg = "flow1(${flag})"
+                val msg2 = "flow2(${flag})"
+                Log.d(TAG, msg)
+                emit(msg)
                 delay(EmitDelay)
-                Log.d(TAG3, "flow2")
-                emit("flow2")
+                Log.d(TAG, msg2)
+                emit(msg2)
             }.collect {
-                Log.d(TAG, "collect1: $it")
+                Log.d(TAG, "collect: $it")
                 delay(CollectDelay)
-                Log.d(TAG, "collect2: $it")
+                Log.d(TAG, "collect: $it")
+            }
+            Log.d(TAG, "------------------------------------")
+            flag++
+            flow {
+                val msg = "flow1(${flag})"
+                val msg2 = "flow2(${flag})"
+                Log.d(TAG, msg)
+                emit(msg)
+                Log.d(TAG, msg2)
+                emit(msg2)
+            }.collect {
+                Log.d(TAG, "耗时操作。。")
+                Thread.sleep(2000L)
+                Log.d(TAG, "collect: $it")
             }
         }
     }
@@ -61,13 +86,51 @@ class MainViewModel : ViewModel() {
     /**
     当 CollectDelay > EmitDelay时，只输出最后结果。
     当 CollectDelay <= EmitDelay时，输出结果和 collectFlow() 一样
+
+    输出结果：
+    flow1(0)
+    collect: flow1(0)
+    // 这里少了一次，collectLatest 的效果
+    flow2(0)
+    collect: flow2(0)
+    collect: flow2(0)
+    ------------------------------------
+    flow1(1)
+    耗时操作。。
+    collect: flow1(1)
+    flow2(1)
+    耗时操作。。
+    collect: flow2(1)
      */
-    private fun collectFlow2() {
+    private fun collectLatestFlow() {
         viewModelScope.launch {
-            countDownFlow.collectLatest {
-                Log.d(TAG, "collectLatest1: $it")
+            var flag = 0
+            flow {
+                val msg = "flow1(${flag})"
+                Log.d(TAG, msg)
+                emit(msg)
+                delay(EmitDelay)
+                val msg2 = "flow2(${flag})"
+                Log.d(TAG, msg2)
+                emit(msg2)
+            }.collectLatest {
+                Log.d(TAG, "collect: $it")
                 delay(CollectDelay)
-                Log.d(TAG, "collectLatest2: $it")
+                Log.d(TAG, "collect: $it")
+            }
+            Log.d(TAG, "------------------------------------")
+            flag++
+            flow {
+                val msg = "flow1(${flag})"
+                Log.d(TAG, msg)
+                emit(msg)
+                val msg2 = "flow2(${flag})"
+                Log.d(TAG, msg2)
+                emit(msg2)
+            }.collectLatest {
+                Log.d(TAG, "耗时操作。。")
+                Thread.sleep(2000L)
+                Log.d(TAG, "collect: $it")
             }
         }
     }

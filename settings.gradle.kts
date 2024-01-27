@@ -25,3 +25,6 @@ include(":generics")
 include(":reflect")
 include(":encryption")
 include(":hilt")
+
+
+println("当前路径：${rootDir}, ${rootProject.projectDir}")

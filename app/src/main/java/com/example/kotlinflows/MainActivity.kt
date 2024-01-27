@@ -6,55 +6,46 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.kotlinflows.part1.MainViewModel
 import com.example.kotlinflows.part3.MainViewModel3
 import com.example.kotlinflows.part3.PartScreen3
-import com.example.kotlinflows.part5.PartScreen5
 import com.example.kotlinflows.ui.theme.KotlinFlowsTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.ObjectInputStream
 import kotlin.math.roundToInt
-import kotlin.system.measureTimeMillis
 
 private const val TAG = "MainActivity"
 
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel3 by viewModels()
+    private val viewModel2: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-         xmlLayout()
+        xmlLayout()
 //        setContent {
 //            KotlinFlowsTheme {
 //                Surface(
 //                    modifier = Modifier.fillMaxSize(),
 //                    color = MaterialTheme.colorScheme.background
 //                ) {
-//                    // Greeting()
+////                     Greeting()
 //                    // Part2Screen()
-//                     PartScreen3()
+////                     PartScreen3()
 //                     // PartScreen5()
 //                }
 //            }
@@ -78,18 +69,14 @@ class MainActivity : ComponentActivity() {
             14f,
             resources.displayMetrics
         )
-        tvCounter.setOnClickListener {
-            Log.d(TAG, "onClick: ")
-            viewModel.incrementCounterTimes(50)
-        }
-        tvCounter.text = "当前值1321312"
+        tvCounter.text = "StateFlow：0"
         collectLifecycleFlow(viewModel.stateFlow) {
-            Log.d(TAG, "collect: $it")
-//            tvCounter.text = "当前值：$it"
+            Log.d(TAG, "collect（stateFlow）: $it")
+            tvCounter.text = "StateFlow：$it"
         }
 
         val tvCounter2 = TextView(this).apply {
-            text = "当前值：0"
+            text = "SharedFlow：0"
             textSize = TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_SP,
                 14f,
@@ -104,24 +91,56 @@ class MainActivity : ComponentActivity() {
                     ).roundToInt(), 0, 0
                 )
             }
+            collectLifecycleFlow(viewModel.sharedFlow) {
+                Log.d(TAG, "collect（sharedFlow）: $it")
+                text = "SharedFlow：$it"
+            }
+        }
+        val button1 = Button(this).apply {
+            layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            text = "stateFlowIncrementTimes1"
+            isAllCaps = false
             setOnClickListener {
                 Log.d(TAG, "onClick: ")
-                viewModel.squareNumber(viewModel.stateFlow.value)
+                viewModel.stateFlowIncrementTimes1(50)
             }
-            collectLifecycleFlow(viewModel.sharedFlow) {
-                Log.d(TAG, "collect: $it")
-                text = "当前值：$it"
+        }
+        val button2 = Button(this).apply {
+            layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            text = "stateFlowIncrementTimes2"
+            isAllCaps = false
+            setOnClickListener {
+                Log.d(TAG, "onClick: ")
+                viewModel.stateFlowIncrementTimes2(50)
+            }
+        }
+        val button3 = Button(this).apply {
+            layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            text = "sharedFlowIncrementTimes"
+            isAllCaps = false
+            setOnClickListener {
+                Log.d(TAG, "onClick: ")
+                viewModel.sharedFlowIncrementTimes(50)
             }
         }
         setContentView(
             linearLayout.apply {
                 addView(tvCounter)
                 addView(tvCounter2)
+
+                addView(button1)
+                addView(button2)
+                addView(button3)
             }
         )
     }
 }
 
+/**
+ * _stateFlow.value++： 50次全部收到
+ * _stateFlow.emit：只收到最后一次
+ * _sharedFlow.emit：50次全部收到
+ */
 fun <T> ComponentActivity.collectLatestLifecycleFlow(flow: Flow<T>, collect: suspend (T) -> Unit) {
     // 在xml中将如何收集flow的结果
     lifecycleScope.launch {
@@ -133,6 +152,12 @@ fun <T> ComponentActivity.collectLatestLifecycleFlow(flow: Flow<T>, collect: sus
     }
 }
 
+/**
+ * 和上面没有区别啊
+ * _stateFlow.value++： 50次全部收到
+ * _stateFlow.emit：只收到最后一次
+ * _sharedFlow.emit：50次全部收到
+ */
 fun <T> ComponentActivity.collectLifecycleFlow(flow: Flow<T>, collect: suspend (T) -> Unit) {
     // 在xml中将如何收集flow的结果
     lifecycleScope.launch {
